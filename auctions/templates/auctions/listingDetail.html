@@ -1,0 +1,101 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block body %}
+<br><br><br>
+<div class="flex-container main-container">
+    <div class="flex-container row ">
+        {% if message %}
+        <div class="alert alert-info">
+            <strong>Info!</strong> {{ message }}
+        </div>
+        {% endif %}
+        <div class="flex-container col-lg-6 border">
+            <img class="detail-img" src="{{ listing.image }}" alt="img">
+        </div>
+        <div class="flex-container col-lg-6">
+            <h3 class="heading">{{ title }}</h3>
+            <span>{{ listing.description }}</span><br><br>
+            <strong>Intital Bid: ${{ listing.startingBid }}</strong>
+            {% if active %}
+            <form action="{% url 'listingDetail' title %}" method="POST">
+                {% csrf_token %}
+                <input type="number" name="bid" id="bid" value="{{ bid }}" step="0.01" required=True>
+                <input type="submit" value="Place Bid">
+            </form>
+            {% elif not bidder.user %} <br>
+            <span>No bid placed</span>
+            {% else %} <br>
+            <strong>Auction closed, sold to {{bidder.user}} in ${{higgestBid}}</strong>
+            {% endif %}
+            {{message}}
+            <br>
+            {% if inWatchlist %}
+            <form action="{% url 'removeFromWatchlist' title %}" method="POST">
+                {% csrf_token %}
+                <input class="btn btn-info pull-left" type="submit" value="Remove from Watchlist">
+            </form>
+            {% else %}
+            <form action="{% url 'addToWatchlist' title %}" method="POST">
+                {% csrf_token %}
+                <input class="btn btn-info pull-left" type="submit" value="Add to Watchlist">
+            </form>
+            {% endif %}
+            {% if active and createdByLoggedInUser %}
+            <form action="{% url 'closeListing' title %}" method="POST">
+                {% csrf_token %}
+                <input class="btn btn-info pull-left ms-3" type="submit" value="Close auction">
+            </form>
+            {% endif %} <br><br>
+            
+            <dl class="row">
+                <dt class="col-sm-3">Posted By</dt>
+                <dd class="col-sm-9">{{listing.user}}</dd>
+                <dt class="col-sm-3">Category</dt>
+                <dd class="col-sm-9">
+                    {% for categor in category %}
+                    {{ categor }}
+                    {% endfor %}
+                </dd>
+                {% if not bidder.user %}
+                <dt class="col-sm-3">Number of Bids</dt>
+                <dd class="col-sm-9">None</dd>
+                {% else %}
+                <dt class="col-sm-3">Number of Bids</dt>
+                <dd class="col-sm-9">{{totalBids}}</dd>
+                <dt class="col-sm-3">Higgest Bid by</dt>
+                <dd class="col-sm-9">{{ bidder.user }}</dd>
+                <dt class="col-sm-3">Higgest bid price</dt>
+                <dd class="col-sm-9">${{ higgestBid }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+    </div>
+    <!--Comment section-->
+    <div class="flex-container row">
+        <div class="coment-bottom bg-white p-2 px-4">
+            <form class="d-flex flex-row add-comment-section mt-4 mb-4" action="{% url 'addComment' title%}"
+                method="post">
+                {% csrf_token %}
+                <input type="text" class="form-control mr-3" placeholder="Add comment" name="comment">
+                <input class="btn btn-primary" type="submit" value="Comment">
+            </form>
+            {% for comment in comments %}
+            <div class="commented-section mt-2">
+                <div class="d-flex flex-row align-items-center commented-user">
+                    <h5 class="mr-2">{{ comment.user }}</h5><span class="dot mb-1"></span>
+                    <!--<span class="mb-1 ml-2">4 hours ago</span>!-->
+                </div>
+                <div class="comment-text-sm"><span>{{ comment.comment }}</span></div>
+
+            </div>
+            {% endfor %}
+
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

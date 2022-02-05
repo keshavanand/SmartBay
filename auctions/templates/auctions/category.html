@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+{% block title %} Listings {% endblock %}
+
+{% block body %}
+<br><br><br>
+<div class="flex-container main-container">
+    <h1 class="heading main-heading">{{name}}</h1> <br>
+    <div class="flex-container row justify-content-center">
+        {% for listing in listings %}
+        {% if listing.active %}
+        
+        <div class="flex-container col-sm-4 col-lg-3 border">
+            <a class="col-link" href="{% url 'listingDetail'  listing.title %}">
+            <img class ="col-img" src="{{listing.image}}" height="200" alt="image">
+            <div class="flex-container col-bottom">
+                <h6 class="heading col-title">{{ listing.title }}</h6>
+                <span class="col-price">${{ listing.startingBid }}</span>
+            </div>
+            </a>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

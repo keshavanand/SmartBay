@@ -1,0 +1,32 @@
+
+.col-bottom{
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.5em;
+    align-items: center;
+    
+}
+.col-link{
+    text-decoration: none;
+    color: #000;
+}
+
+.col-img{
+    transition: transform .2s;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+.col-img:hover{
+    transform: scale(1.1);
+}
+
+.main-heading{
+    text-align: center;
+}
+.detail-img{
+    width: 500px;
+    height: 500px;
+}
