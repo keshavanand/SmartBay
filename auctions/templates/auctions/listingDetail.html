@@ -5,14 +5,14 @@
 {% block body %}
 <br><br><br>
 <div class="flex-container main-container">
-    <div class="flex-container row ">
+    <div class="flex-container row">
         {% if message %}
         <div class="alert alert-info">
             <strong>Info!</strong> {{ message }}
         </div>
         {% endif %}
         <div class="flex-container col-lg-6 border">
-            <img class="detail-img" src="{{ listing.image }}" alt="img">
+            <img class="detail-img rounded mx-auto d-block" src="{{ listing.image }}" alt="img">
         </div>
         <div class="flex-container col-lg-6">
             <h3 class="heading">{{ title }}</h3>
